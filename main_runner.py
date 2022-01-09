@@ -94,10 +94,15 @@ def optList() -> int:  # feature list
     print("--> Press 4 to get \"Tunk Rank\" -Ranking Output")
     print("--> Press 5 to get \"Betweenness Centrality\" -Ranking Output")
     print("--> Press 6 to get \"Closeness Centrality\" -Ranking Output")
-    print("--> Press 7 to plot and see \"Visual Representation\" of a User in created Social Network")
+    print("--> Press 7 to get \"Acquaintance Score A ( i )\" -Ranking Output")
+    print("--> Press 8 to get \"Acquaintance-Affinity Score AA ( j )\" -Ranking Output")
+    print("--> Press 9 to get \"Acquaintance-Affinity-Identification Score AAI ( j )\" -Ranking Output")
+
+    # print("--> Press 8 to plot and see \"Visual Representation\" of a User in created Social Network")
+
     print("|| Enter your choice of Operation --> ", end="")
     opt = int(input())
-    if (opt not in range(9)):
+    if opt not in range(10):
         print("|| Failure || : Wrong Inputs for Operation Selection!!...Try Again->\n")
         optList()
     else:
@@ -118,8 +123,14 @@ def operate(opt, sn, files):  # Operate according to the choice->"opt"
         doBCR(sn, files)
     elif (opt == 6):
         doCCR(sn, files)
-    elif (opt == 7):
-        doDraw(sn)
+    elif opt == 7:
+        doAi(sn, files)
+    elif opt == 8:
+        doAAj(sn, files)
+    elif opt == 9:
+        doAAIj(sn, files)
+    # elif (opt == 7):
+    #     doDraw(sn)
     else:
         print("|| Failure || : Wrong Inputs for Ranking Selection!!\n")
 
@@ -320,6 +331,27 @@ def doCCR(sn, files):
     sn.printCSV_Ranks(name="ccr", mode=1, xmode=m, xmode1=n, sfpath=files[18], filepath=files[13])
 
 
+def doAi(sn, files):
+    print("\n|| Acquaintance Score A ( i ) || selected->")
+    success = sn.calculate_Ai_score(files[2], files['mention_count'])
+    if success:
+        print("Acquaintance score calculated successfully.")
+        print("Output filepath ----> ./Output/Acquaintance_score.csv")
+        sleep(3)
+    else:
+        print("Something went wrong!")
+
+
+def doAAj(sn, files):
+    print("\n|| Acquaintance-Affinity Score AA ( j ) || selected->")
+    sleep(2)
+
+
+def doAAIj(sn, files):
+    print("\n|| Acquaintance-Affinity-Identification Score AAI ( j ) || selected->")
+    sleep(2)
+
+
 def doDraw(sn):
     print("\n|| Visual Representation || selected->")
     print(
@@ -398,6 +430,7 @@ if __name__ == "__main__":
         1: cwd + '/Data/friends_library.json'.replace('\\', '/'),  # Friends json
         2: cwd + '/Data/account_based_features.csv'.replace('\\', '/'),  # ACM output
         3: cwd + '/Data/account_based_measures.csv'.replace('\\', '/'),  # AVGM output
+        'mention_count': "./Data/mentions_count.csv",
 
         # THE DON'T TOUCH ZONE***********************************************************************************************
         0: cwd + '/Output/usersList.csv'.replace('\\', '/'),  # user_name and ID

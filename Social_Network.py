@@ -7,6 +7,7 @@ from time import sleep
 import networkx as nx
 import random
 import matplotlib.pyplot as plt
+import pandas as pd
 
 
 # Social Network Module
@@ -138,7 +139,7 @@ class Social_Network:
                 print("|| INFO || : Date for data obtained :", self.__date)
 
                 if (
-                save):  # if save parameter is True, it will save the whole Network in a JSON file in (savepath) path, for fast access next time
+                        save):  # if save parameter is True, it will save the whole Network in a JSON file in (savepath) path, for fast access next time
                     assert (len(savepath1) and len(savepath2)) > 0, "SavePaths not given"
                     print(
                         "\n|| Alert || : Wait a while...Userslist.csv and Rejection_List.csv files are being created....\n")
@@ -640,7 +641,7 @@ class Social_Network:
             for user in self.__users:
                 x = 0  # x=(noderank of ins/outs of each node)
                 for i in self.__page_rank[user]["in"]: x += (
-                            self.__page_rank[i]["node_rank"] / self.__page_rank[i]["out"])
+                        self.__page_rank[i]["node_rank"] / self.__page_rank[i]["out"])
                 prev = self.__page_rank[user]["node_rank"]
                 self.__page_rank[user]["node_rank"] = (revdamp + (damp * x))
                 diff += abs(prev - self.__page_rank[user]["node_rank"])
@@ -668,7 +669,7 @@ class Social_Network:
     def __user_rank_2_algo(self, epoch) -> None:  # applies user rank algo(ref incoming link) on the network
         self.__getIODegrees()  # in-out degree dict is available now
         f_t = lambda x: self.__network[x]["followers"] / (
-        self.__network[x]["tweet_count"])  # ratio = (followers count / tweets count)
+            self.__network[x]["tweet_count"])  # ratio = (followers count / tweets count)
         user_rank_ratios = {x: f_t(x) for x in self.__users}  # stores the user rank ratios for all users
         self.__user_rank_2 = {x: 0 for x in self.__users}  # stores the user ranks(ref incoming links) for all users
         diff = 1
@@ -679,7 +680,7 @@ class Social_Network:
                 x = 0  # x=((1+(ur_ratio of curr * ur of incoming link))/(no. of outs of incoming link * no. of followers of incoming link)
                 for inc in self.__degree[user]["in"]:
                     x += (1 + (user_rank_ratios[user] * self.__user_rank_2[inc])) / (
-                                len(self.__degree[inc]["out"]) * self.__network[inc]["followers"])
+                            len(self.__degree[inc]["out"]) * self.__network[inc]["followers"])
                 prev = self.__user_rank_2[user]
                 self.__user_rank_2[user] = x
                 diff += abs(prev - self.__user_rank_2[user])
@@ -692,7 +693,7 @@ class Social_Network:
     def __user_rank_3_algo(self, epoch) -> None:  # applies user rank algo(ref outgoing link) on the network
         self.__getIODegrees()  # in-out degree dict is available now
         f_t = lambda x: self.__network[x]["followers"] / (
-        self.__network[x]["tweet_count"])  # ratio = (followers count / tweets count)
+            self.__network[x]["tweet_count"])  # ratio = (followers count / tweets count)
         user_rank_ratios = {x: f_t(x) for x in self.__users}  # stores the user rank ratios for all users
         self.__user_rank_3 = {x: 0 for x in self.__users}  # stores the user ranks(ref outgoing links) for all users
         diff = 1
@@ -703,7 +704,7 @@ class Social_Network:
                 x = 0  # x=((1+(ur_ratio of curr * ur of outgoing link))/(no. of ins of outgoing link * no. of followers of incoming link)
                 for outs in self.__degree[user]["out"]:
                     x += (1 + (user_rank_ratios[user] * self.__user_rank_3[outs])) / (
-                                len(self.__degree[outs]["in"]) * self.__network[outs]["followers"])
+                            len(self.__degree[outs]["in"]) * self.__network[outs]["followers"])
                 prev = self.__user_rank_3[user]
                 self.__user_rank_3[user] = x
                 diff += abs(prev - self.__user_rank_3[user])
@@ -716,7 +717,7 @@ class Social_Network:
     def __tunk_rank_1_algo(self, epoch, mul) -> None:  # applies Tunk rank algo(ref incoming link) on the network
         self.__getIODegrees()  # in-out degree dict is available now
         f_t = lambda x: self.__network[x]["followers"] / (
-        self.__network[x]["tweet_count"])  # ratio = (followers count / tweets count)
+            self.__network[x]["tweet_count"])  # ratio = (followers count / tweets count)
         tunk_rank_ratios = {x: f_t(x) for x in self.__users}  # stores the tunk rank ratios for all users
         self.__tunk_rank_1 = {x: 0 for x in self.__users}  # stores the tunk ranks(ref incoming links) for all users
         diff = 1
@@ -729,7 +730,7 @@ class Social_Network:
                     l = len(self.__network[inc]["friends"])  # no. of friends
                     if (l == 0): l = 1
                     x += (1 + (tunk_rank_ratios[user] * self.__tunk_rank_1[inc])) / (
-                                len(self.__degree[inc]["out"]) * l * mul)
+                            len(self.__degree[inc]["out"]) * l * mul)
                 prev = self.__tunk_rank_1[user]
                 self.__tunk_rank_1[user] = x
                 # print(prev, self.__tunk_rank_1[user])
@@ -742,7 +743,7 @@ class Social_Network:
     def __tunk_rank_2_algo(self, epoch, mul) -> None:  # applies Tunk rank algo(ref outgoing link) on the network
         self.__getIODegrees()  # in-out degree dict is available now
         f_t = lambda x: self.__network[x]["followers"] / (
-        self.__network[x]["tweet_count"])  # ratio = (followers count / tweets count)
+            self.__network[x]["tweet_count"])  # ratio = (followers count / tweets count)
         tunk_rank_ratios = {x: f_t(x) for x in self.__users}  # stores the tunk rank ratios for all users
         self.__tunk_rank_2 = {x: 0 for x in self.__users}  # stores the tunk ranks(ref outgoing links) for all users
         diff = 1
@@ -755,7 +756,7 @@ class Social_Network:
                     l = len(self.__network[outs]["friends"])  # no. of friends
                     if (l == 0): l = 1
                     x += (1 + (tunk_rank_ratios[user] * self.__tunk_rank_2[outs])) / (
-                                len(self.__degree[outs]["in"]) * l * mul)
+                            len(self.__degree[outs]["in"]) * l * mul)
                 prev = self.__tunk_rank_2[user]
                 self.__tunk_rank_2[user] = x
                 diff += abs(prev - self.__tunk_rank_2[user])
@@ -1050,6 +1051,73 @@ class Social_Network:
         # Clearing
         self.__Graph.clear()
         return
+
+    def calculate_Ai_score(self, account_based_features_filepath, mentions_count_filepath):
+        """
+        :param account_based_features_filepath:
+        :param mentions_count_filepath:
+        :return: ai score
+
+        A(i) = (F1 + M4 + RP3 + RT3) / n
+        F1 = Number of followers
+        M4 = Number of users mentioning the author
+        RP3 = Number of users who have replied author’s tweets
+        RT3 = Number of users who have retweeted author’s tweets
+        n = number of users
+        """
+        print("Calculating Acquaintance Score A ( i ) ")
+
+        try:
+            account_based_features = pd.read_csv(account_based_features_filepath)
+            mention_count = pd.read_csv(mentions_count_filepath)  # M4
+            reply_count = pd.read_csv("./Data/reply_count.csv")  # RP3
+            usernames = mention_count["User_name"].tolist()
+
+            rt_array = []
+            Followers_dict = {}
+            Followers_dict_1 = {}
+            mention_dict = {}
+            reply_array = []
+            nf = []
+
+            for i, j in zip(account_based_features["User Name"], account_based_features["Followers"]):
+                Followers_dict[i] = j
+            c = 0
+            for i in usernames:
+                c = c + 1
+                if i in Followers_dict.keys():
+                    Followers_dict_1[i] = Followers_dict[i]
+                else:
+                    nf.append(i)
+                    print("Not found --> ", i)
+
+            for i in nf:
+                usernames.remove(i)
+            # len(usernames)
+
+            for username in usernames:
+                mention_dict[username] = mention_count[mention_count['User_name'] == username]['Mention_count'].values[
+                    0]
+                reply_array.append(
+                    reply_count[reply_count['User_name'] == username]['RP3'].values[0]
+                )
+                rt_array.append(account_based_features[account_based_features['User Name'] == username]['Retweet Count'].values[0])
+
+            n = len(usernames)
+
+            with open('./Output/Acquaintance_score.csv', 'w+', encoding='utf-8', newline='') as f:
+                writer = DictWriter(f, ['User_name', 'Follower_count(F1)', 'M4', 'RT3', 'RP3', 'Acquaintance_score'])
+                writer.writeheader()
+                for i in range(n):
+                    p = (Followers_dict_1[usernames[i]] + mention_dict[usernames[i]] + rt_array[i] + reply_array[i])
+                    writer.writerow({'User_name': usernames[i], 'Follower_count(F1)': Followers_dict_1[usernames[i]],
+                                     'M4': mention_dict[usernames[i]], 'RT3': rt_array[i], 'RP3': reply_array[i],
+                                     'Acquaintance_score': p})
+        except Exception as e:
+            print(e)
+            return False
+
+        return True
 
 
 if __name__ == "__main__":
