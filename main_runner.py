@@ -428,8 +428,8 @@ if __name__ == "__main__":
     # INPUT FILE LOCATIONS (CUSTOMIZABLE AFTER CURRENT WORKING DIRECTORY) -------***************
     files = {
         1: cwd + '/Data/friends_library.json'.replace('\\', '/'),  # Friends json
-        2: cwd + '/Data/account_based_features.csv'.replace('\\', '/'),  # ACM output
-        3: cwd + '/Data/account_based_measures.csv'.replace('\\', '/'),  # AVGM output
+        2: cwd + '/Data/account_based_features_2.csv'.replace('\\', '/'),  # ACM output
+        3: cwd + '/Data/account_based_measures_2.csv'.replace('\\', '/'),  # AVGM output
         'mention_count': "./Data/mentions_count.csv",
 
         # THE DON'T TOUCH ZONE***********************************************************************************************

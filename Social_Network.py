@@ -6,7 +6,7 @@ from copy import deepcopy
 from time import sleep
 import networkx as nx
 import random
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import pandas as pd
 
 
@@ -772,6 +772,7 @@ class Social_Network:
                         net: dict = {}) -> None:  # Internal function for Generating All pair shortest paths
         print("\n|| Alert || : ......Starting Shortest paths creation for the whole netwrok. It may take a while....\n")
         if (xmode == 1):
+            
             for i in net.keys():
                 self.__spaths[i] = {x: [] for x in users}
                 for j in net[i]:
@@ -822,6 +823,8 @@ class Social_Network:
                     filepath))
 
         elif (xmode == 2):
+            
+
             # From saved files
             with open(filepath) as rf:
                 self.__spaths = json.load(rf)
@@ -830,7 +833,9 @@ class Social_Network:
         print("\n|| Success || : All Shortest paths have been created!!\n")
 
     # Betweenness Centrality ::
-    def __betCentRank(self, xmode=1, filepath=" ", xmode1=1):  # using apsp for getting Betweenness-Centrality ranks
+    def __betCentRank(self, xmode=1, filepath=" ", xmode1=1):
+        print(self.__user_friends) 
+         # using apsp for getting Betweenness-Centrality ranks
         self.__shortestPaths(xmode, xmode1, filepath, users=self.__users, net=self.__user_friends)
         self.__bcrdict = {x: 0 for x in self.__users}
         # print(self.__bcrdict)
