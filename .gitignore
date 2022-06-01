@@ -11,5 +11,7 @@ feature-extraction/output
 test.py
 key.py
 
-Data/
-Output/
+Data/*.csv
+Data/*.json
+Output/*.csv
+Output/*.json
