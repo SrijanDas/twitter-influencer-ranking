@@ -1,0 +1,15 @@
+venv
+.idea
+__pycache__
+feature-extraction/data
+feature-extraction/data1/
+feature-extraction/test.py
+feature-extraction/file_mover.py
+feature-extraction/output
+
+.ipynb_checkpoints
+test.py
+key.py
+
+Data/
+Output/
